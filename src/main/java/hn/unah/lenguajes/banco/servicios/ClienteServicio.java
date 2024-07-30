@@ -18,31 +18,33 @@ public class ClienteServicio {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
 
-    @Autowired
-    private DireccionRepositorio direccionRepositorio;
-
-    @Autowired
-    private ProductoRepositorio productoRepositorio;
+    
 
     public List<Cliente> obtenerTodos(){
         return this.clienteRepositorio.findAll();
     }
 
     public Cliente crearCliente(Cliente nvoCliente){
-        Cliente clienteGuardar = this.clienteRepositorio.save(nvoCliente);
-        this.clienteRepositorio.save(clienteGuardar);
 
         Direccion nvaDireccion = nvoCliente.getDireccion();
-        nvaDireccion.setCliente(clienteGuardar);
-        this.direccionRepositorio.save(nvaDireccion);
+        if(nvaDireccion != null){
+            nvaDireccion.setCliente(nvoCliente);
+        }
+        
 
-        for(Productos nvoProducto:nvoCliente.getProductos()){
-            nvoProducto.setCliente(clienteGuardar);
-            this.productoRepositorio.save(nvoProducto);
+        List<Productos> productos = nvoCliente.getProductos();        
+        if(productos!=null){
+            for(Productos producto : productos){
+                producto.setCliente(nvoCliente);
+            }
         }
 
-        return clienteGuardar;
+        return this.clienteRepositorio.save(nvoCliente);
+     
+        
     }
+
+
 
     public boolean buscarPorIdentidad(String identidad){
         return this.clienteRepositorio.existsById(identidad);

@@ -1,6 +1,8 @@
 package hn.unah.lenguajes.banco.modelos;
 
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -25,7 +27,8 @@ public class Productos {
 
     private String descripcion;
 
-    //private LocalDate fechaApertura;
+    @Column(name="fechaapertura")
+    private LocalDate fechaApertura;
 
     private double saldo;
 
